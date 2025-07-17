@@ -1,0 +1,71 @@
+<script setup lang="ts">
+import {useRouteQuery} from '@vueuse/router';
+import {ref} from 'vue';
+import {useI18n} from 'vue-i18n';
+
+const page = useRouteQuery('page', 1, { transform: Number })
+const pageSize = useRouteQuery('page_size', 10, { transform: Number })
+const total = ref(10)
+
+const { t } = useI18n({ messages: {
+  zh: {
+    serverList: '服务器列表',
+  },
+} })
+</script>
+
+<template>
+  <div class="p-4 flex gap-2">
+
+    <el-card
+      shadow="hover"
+      class="grow flex flex-col"
+      header-class="flex justify-between"
+      body-class="grow min-w-0"
+    >
+
+      <template #header>
+        <div>
+          {{t('serverList')}}
+        </div>
+      </template>
+
+      <el-table>
+        <el-table-column :label="t('label')">
+
+        </el-table-column>
+        <el-table-column :label="t('port')">
+
+        </el-table-column>
+        <el-table-column :label="t('game')">
+
+        </el-table-column>
+        <el-table-column :label="t('online')">
+
+        </el-table-column>
+        <el-table-column>
+
+        </el-table-column>
+      </el-table>
+
+      <template #footer>
+        <el-pagination
+          layout="sizes, prev, pager, next, total"
+          :total="total"
+          v-model:current-page="page"
+          v-model:page-size="pageSize"
+        ></el-pagination>
+      </template>
+
+    </el-card>
+
+    <div class="w-96">
+
+    <el-card shadow="hover" class="h-72">
+
+    </el-card>
+
+    </div>
+
+  </div>
+</template>

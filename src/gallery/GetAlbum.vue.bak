@@ -1,0 +1,58 @@
+<script setup lang="ts">
+import type { Album } from '@/utils/tables'
+import { ref, watch } from 'vue'
+import {api} from '@/utils/axios'
+import {useRouteParams, useRouteQuery} from '@vueuse/router'
+import usePersistedStore from '@/stores/persisted'
+
+const persisted = usePersistedStore()
+const album = ref<Album|null>(null)
+const slug = useRouteParams<string>('album')
+const page = useRouteQuery('page', 1, { transform: Number })
+const pageSize = useRouteQuery('page_size', 10, {transform: Number })
+const reviewPage = useRouteQuery('review_page', 1, { transform: Number })
+const reviewPageSize = useRouteQuery('review_page_size', 10, { transform: Number })
+
+watch(
+  [slug, page, pageSize, reviewPage, reviewPageSize],
+  async ([slug, page, pageSize, reviewPage, reviewPageSize]) => {
+  album.value = await api.get<any, Album>(`/gallery/albums/${slug}`, {params: {
+    page: page,
+    page_size: pageSize,
+    review_page: reviewPage,
+    review_page_size: reviewPageSize,
+  } })
+}, { immediate: true })
+</script>
+
+<template>
+  <div v-if="album" class="full-screen grid grid-cols-[3fr_1fr] grid-rows-[1fr_1fr_3fr] p-4 gap-2">
+
+    <el-card shadow="hover" body-class="h-full flex flex-col">
+      <el-page-header @back="$router.back">
+      </el-page-header>
+    </el-card>
+
+    <el-card shadow="hover" class="row-span-2">
+
+    </el-card>
+
+    <div class="row-span-2 overflow-y-auto p-2">
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-2">
+        <el-image
+          v-for="image in album.images"
+          :key="image.id"
+          :src="`${persisted.imgAddr}/images/${image.filename}`"
+          fit="cover"
+          class="aspect-video rounded-xl"
+        >
+        </el-image>
+      </div>
+    </div>
+
+    <el-card shadow="hover">
+
+    </el-card>
+
+  </div>
+</template>

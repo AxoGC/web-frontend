@@ -1,0 +1,236 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+// 定义类型
+interface DataItem {
+  id: number
+  name: string
+  email: string
+  phone: string
+  department: string
+  position: string
+  salary: string
+  joinDate: string
+}
+
+interface FieldConfig {
+  key: keyof DataItem
+  label: string
+  priority: number
+  hidden?: boolean
+}
+
+// 模拟数据
+const sampleData: DataItem[] = [
+  {
+    id: 1,
+    name: '张三',
+    email: 'zhangsan@example.com',
+    phone: '13800138000',
+    department: '技术部',
+    position: '前端工程师',
+    salary: '¥15,000',
+    joinDate: '2023-01-15'
+  },
+  {
+    id: 2,
+    name: '李四',
+    email: 'lisi@example.com',
+    phone: '13800138001',
+    department: '产品部',
+    position: '产品经理',
+    salary: '¥18,000',
+    joinDate: '2022-06-20'
+  },
+  {
+    id: 3,
+    name: '王五',
+    email: 'wangwu@example.com',
+    phone: '13800138002',
+    department: '设计部',
+    position: 'UI设计师',
+    salary: '¥12,000',
+    joinDate: '2023-03-10'
+  },
+  {
+    id: 4,
+    name: '赵六',
+    email: 'zhaoliu@example.com',
+    phone: '13800138003',
+    department: '技术部',
+    position: '后端工程师',
+    salary: '¥16,000',
+    joinDate: '2022-11-05'
+  }
+]
+
+// 响应式数据
+const data = ref<DataItem[]>(sampleData)
+const fieldConfig = ref<FieldConfig[]>([
+  { key: 'name', label: '姓名', priority: 1 },
+  { key: 'email', label: '邮箱', priority: 2 },
+  { key: 'phone', label: '电话', priority: 3 },
+  { key: 'department', label: '部门', priority: 4 },
+  { key: 'position', label: '职位', priority: 5 },
+  { key: 'salary', label: '薪资', priority: 6 },
+  { key: 'joinDate', label: '入职日期', priority: 7 }
+])
+
+// 计算属性
+const visibleFields = computed(() =>
+  fieldConfig.value.filter(field => !field.hidden)
+)
+
+const hiddenFieldsCount = computed(() =>
+  fieldConfig.value.length - visibleFields.value.length
+)
+
+// 方法
+const handleFieldToggle = (fieldKey: keyof DataItem) => {
+  const field = fieldConfig.value.find(f => f.key === fieldKey)
+  if (field) {
+    field.hidden = !field.hidden
+  }
+}
+</script>
+
+<template>
+  <div class="max-w-7xl mx-auto p-4">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 mb-4">员工信息管理</h1>
+
+      <!-- 字段选择器 -->
+      <div class="mb-4">
+        <p class="text-sm text-gray-600 mb-2">选择要显示的字段：</p>
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="field in fieldConfig"
+            :key="field.key"
+            @click="handleFieldToggle(field.key)"
+            :class="[
+              'px-3 py-1 rounded-full text-sm font-medium transition-colors',
+              field.hidden
+                ? 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+            ]"
+          >
+            {{ field.label }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 响应式提示 -->
+      <div class="text-sm text-gray-500 mb-4">
+        <div class="lg:hidden">
+          <span class="inline-block w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
+          当前视图：卡片模式
+        </div>
+        <div class="hidden lg:block">
+          <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+          当前视图：表格模式
+        </div>
+      </div>
+    </div>
+
+    <!-- 响应式内容区域 -->
+    <div class="bg-gray-50 rounded-lg p-6">
+      <!-- 宽屏：表格视图 -->
+      <div class="hidden lg:block">
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  v-for="field in visibleFields"
+                  :key="field.key"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b"
+                >
+                  {{ field.label }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr
+                v-for="item in data"
+                :key="item.id"
+                class="hover:bg-gray-50 transition-colors"
+              >
+                <td
+                  v-for="field in visibleFields"
+                  :key="field.key"
+                  class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                >
+                  {{ item[field.key] }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 窄屏：卡片视图 -->
+      <div class="lg:hidden">
+        <div class="space-y-4">
+          <div
+            v-for="item in data"
+            :key="item.id"
+            class="bg-white rounded-lg shadow border border-gray-200 p-4"
+          >
+            <!-- 移动端：每行1个字段 -->
+            <div class="sm:hidden space-y-3">
+              <div
+                v-for="field in visibleFields"
+                :key="field.key"
+                class="flex justify-between items-center"
+              >
+                <span class="font-medium text-gray-600 text-sm">{{ field.label }}:</span>
+                <span class="text-gray-900 text-sm">{{ item[field.key] }}</span>
+              </div>
+            </div>
+
+            <!-- 平板端：每行2个字段 -->
+            <div class="hidden sm:block md:hidden">
+              <div class="grid grid-cols-2 gap-y-3 gap-x-4">
+                <div
+                  v-for="field in visibleFields"
+                  :key="field.key"
+                  class="flex flex-col"
+                >
+                  <span class="font-medium text-gray-600 text-sm">{{ field.label }}:</span>
+                  <span class="text-gray-900 text-sm">{{ item[field.key] }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 小屏桌面：每行3个字段 -->
+            <div class="hidden md:block lg:hidden">
+              <div class="grid grid-cols-3 gap-y-3 gap-x-4">
+                <div
+                  v-for="field in visibleFields"
+                  :key="field.key"
+                  class="flex flex-col"
+                >
+                  <span class="font-medium text-gray-600 text-sm">{{ field.label }}:</span>
+                  <span class="text-gray-900 text-sm">{{ item[field.key] }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据统计 -->
+    <div class="mt-6 bg-white rounded-lg shadow p-4">
+      <div class="flex flex-wrap gap-4 text-sm text-gray-600">
+        <span>总记录数: <strong class="text-gray-900">{{ data.length }}</strong></span>
+        <span>显示字段: <strong class="text-gray-900">{{ visibleFields.length }}</strong></span>
+        <span>隐藏字段: <strong class="text-gray-900">{{ hiddenFieldsCount }}</strong></span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+/* 如果需要额外的样式，可以在这里添加 */
+</style>

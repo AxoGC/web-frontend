@@ -1,0 +1,202 @@
+<script setup lang="ts">
+import BbsInfo from './BbsInfo.vue';
+import type {ForumGroup, Post} from '@/utils/tables';
+import {ref, watch} from 'vue';
+import {api} from '@/utils/axios';
+import usePersistedStore from '@/stores/persisted';
+import useSessionStore from '@/stores/session';
+import {useI18n} from 'vue-i18n';
+import {Setting} from '@element-plus/icons-vue';
+import dayjs from 'dayjs';
+import {use} from 'echarts/core';
+import {GridComponent, TitleComponent, TooltipComponent} from 'echarts/components';
+import {BarChart} from 'echarts/charts';
+import {CanvasRenderer} from 'echarts/renderers';
+import {computed} from 'vue';
+import type {EChartsOption} from 'echarts';
+import VChart from 'vue-echarts';
+
+const infoState = ref(false)
+const forumGroups = ref<ForumGroup[]>([])
+const persisted = usePersistedStore()
+const session = useSessionStore()
+api.get<any, ForumGroup[]>('/bbs/forum-groups').then(res => {
+  forumGroups.value = res
+}).catch(() => {})
+
+const { t } = useI18n({ messages: {
+  zh: {
+    addForumGroup: '添加论坛组',
+    addForum: '添加论坛',
+    forumList: '论坛列表',
+
+    forumPostCount: '分区发帖量排行',
+
+    recommend: '推荐内容',
+    selected: '精选',
+    popular: '热门',
+    latest: '最新',
+
+  },
+} })
+
+use([TitleComponent, GridComponent, BarChart, CanvasRenderer, TooltipComponent])
+
+const postCountChartOption = computed<EChartsOption>(() => {
+  const topForums = forumGroups.value.flatMap(group => group.forums).sort((a, b) => b.postCount - a.postCount).slice(0, 5)
+  return {
+    title: {
+      text: t('forumPostCount'),
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    grid: {
+      bottom: '20px',
+    },
+    xAxis: {
+      type: 'category',
+      data: topForums.map(forum => forum.title),
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [{
+      data: topForums.map(forum => forum.postCount),
+      type: 'bar',
+    }],
+  }
+})
+
+const currentRecommendOption = ref('popular')
+const recommendOptions = [
+  { label: t('popular'), value: 'popular' },
+  { label: t('selected'), value: 'selected' },
+  { label: t('latest'), value: 'latest' },
+]
+const recommendCount = ref(10)
+
+const currentStatisticTab = ref('postCount')
+
+const recommends = ref<Post[]>([])
+
+watch([recommendCount, currentRecommendOption], async ([recommendCount, currentRecommendOption]) => {
+  recommends.value = await api.get<any, Post[]>(`/bbs/recommends?option=${currentRecommendOption}&count=${recommendCount}`)
+}, { immediate: true })
+</script>
+
+<template>
+  <div class="p-4 flex flex-col md:flex-row gap-4">
+    <template>
+      <div>{{ t('forumList') }}</div>
+      <el-dropdown>
+        <el-button :icon="Setting" circle></el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>{{t('addForumGroup')}}</el-dropdown-item>
+            <el-dropdown-item>{{t('addForum')}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </template>
+    <div
+      class="grow flex flex-col"
+      header-class="flex justify-between items-center"
+      body-class="grow overflow-y-auto"
+      shadow="never"
+    >
+      <div v-if="forumGroups" class="flex flex-col gap-4">
+        <el-card
+          v-for="forumGroup in forumGroups"
+          :key="forumGroup.id"
+          shadow="hover"
+        >
+          <template #header>
+            <div>{{ forumGroup.label }}</div>
+          </template>
+          <div class="mt-2 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-2">
+            <el-card v-for="forum in forumGroup.forums" :key="forum.title"
+              class="hover:translate-x-1 group"
+              body-class="aspect-video bg-cover bg-center flex flex-col justify-end text-white relative"
+              :body-style="{backgroundImage: `url(${persisted.fileAddr}/forum-covers/${forum.slug})`}"
+              shadow="hover"
+              @click="$router.push(`/forums/${forum.slug}`)"
+            >
+              <div class="z-10">
+                <h3 class="text-xl font-bold mb-2">{{forum.title}}</h3>
+                <div class="flex items-center">
+                  <p class="line-clamp-2 truncate">{{forum.subTitle}}</p>
+                  <p class="ms-auto text-nowrap">{{forum.postCount}} 帖</p>
+                  <el-icon :size="20" class="transition-transform group-hover:translate-x-1">
+                    <ArrowRightBold />
+                  </el-icon>
+                </div>
+              </div>
+              <div class="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-black/40 to-transparent z-0 transition-opacity duration-300 group-hover:opacity-30" />
+            </el-card>
+          </div>
+        </el-card>
+      </div>
+      <el-empty v-else :description="$t('bbs.home.empty')" />
+    </div>
+
+    <div class="flex flex-col gap-4">
+
+      <el-card class="h-64" shadow="hover" body-class="h-full">
+        <v-chart :option="postCountChartOption" autoresize />
+      </el-card>
+
+      <el-card
+        shadow="hover"
+        class="flex flex-col"
+        header-class="flex items-center gap-2"
+        body-class="p-2 grow overflow-y-auto flex flex-col divide-y"
+      >
+        <template #header>
+          <div>{{t('recommend')}}</div>
+          <el-button :icon="Setting" circle class="ms-auto"></el-button>
+          <el-segmented v-model="currentRecommendOption" :options="recommendOptions" class="recommend-option">
+          </el-segmented>
+        </template>
+        <div
+          div v-for="recommend in recommends"
+          :key="recommend.id"
+          class="shrink-0 p-2 hover:bg-slate-100"
+          @click="$router.push(`/posts/${recommend.slug}`)"
+        >
+          <div class="flex justify-between">
+            <el-text size="large" truncated>
+            {{recommend.title}}
+            </el-text>
+            <el-link truncated @click.stop="$router.push(`/forums/${recommend.forum.slug}`)"
+              class="text-sm truncate">
+              {{recommend.forum.title}}
+            </el-link>
+          </div>
+          <div class="flex gap-2">
+            <el-text truncated>
+              {{recommend.user.name}}
+            </el-text>
+            <el-text truncated>
+              {{dayjs(recommend.createdAt).format('MM月DD日 HH:mm')}}
+            </el-text>
+            <el-text truncated>
+              {{recommend.reviewCount}}{{t('review')}}
+            </el-text>
+          </div>
+        </div>
+      </el-card>
+
+    </div>
+  </div>
+
+  <el-drawer v-model="infoState" size="50%" :title="$t('bbs.bbsinfo.title')">
+    <bbs-info />
+  </el-drawer>
+</template>
+
+<style>
+.recommend-option {
+  --el-border-radius-base: 16px;
+}
+</style>

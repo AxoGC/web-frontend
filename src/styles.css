@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #28abce; /* 主题色 */
+  --primary-light: color-mix(in srgb, var(--primary), white 50%);
+  --primary-dark: color-mix(in srgb, var(--primary), black 50%);
+  --subtle-bg-color: #e5eaf3; /* 页脚背景色 */
+  --main-bg-color: #f0f0f0; /* 主要区域背景色 */
+  --font-family: 'Arial, sans-serif';
+  --font-size: 16px;
+
+  --el-color-primary: var(--primary) !important;
+  --el-font-size-base: 0.9rem;
+
+  ----el-menu-active-color: #ffffff;
+  ----el-menu-active-bg-color: var(--primary);
+
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  background-color: var(--main-bg-color);
+}
+
+@media (max-width: 768px) {
+	:root {
+  	--dialog-width: 90%;
+  	--el-menu-base-level-padding: 10px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --dialog-width: 70%;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --dialog-width: 50%;
+  }
+}
+
+.dark {
+  --subtle-bg-color: #262727;
+  --main-bg-color: #3c3c3c;
+}
+
+.el-link {
+  font-size: 1rem;
+}
+
+.el-card {
+	border-radius: 12px;
+}
+
+.el-image {
+	display: block;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+h1 {
+	font-size: 2rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+.full-screen {
+  height: calc(100vh - 60px);
+}
+/*
+
+.el-menu-item.is-active {
+	background-color: var(--el-menu-active-bg-color);
+}
+
+.el-menu {
+	background-color: transparent;
+	border-width: 0 !important;
+}
+
+.el-sub-menu__title {
+	padding-right: var(--el-menu-base-level-padding) !important;
+}
+
+.el-sub-menu__title:hover {
+	color: var(--el-menu-text-color) !important;
+}
+
+.el-sub-menu__title {
+	border-radius: 2rem;
+}
+
+.el-sub-menu__icon-arrow {
+	display: none;
+}
+*/

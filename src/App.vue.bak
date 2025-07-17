@@ -1,0 +1,15 @@
+<script setup lang="ts">
+import NavBar from './components/NavBar.vue';
+import AppFooter from './components/AppFooter.vue';
+
+</script>
+
+<template>
+  <div class="h-screen flex flex-col p-4 gap-4">
+    <nav-bar class="shrink-0" />
+    <div :class="['grow min-h-0 overflow-auto no-scrollbar', { 'container mx-auto': $route.meta.container }]">
+      <router-view />
+      <app-footer v-if="$route.meta.footer" />
+    </div>
+  </div>
+</template>
