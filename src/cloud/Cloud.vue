@@ -50,46 +50,48 @@ function goPreMenu() {
 </script>
 
 <template>
-  <el-card shadow="hover">
-    <template #header>
-      <div class="flex flex-row items-center gap-2">
-        <div>
-          {{ currentPath }}
+  <div class="max-w-5xl mx-auto p-4">
+    <el-card shadow="hover">
+      <template #header>
+        <div class="flex flex-row items-center gap-2">
+          <div>
+            {{ currentPath }}
+          </div>
+          <el-button class="ms-auto" v-if="currentPath !== '/'" @click="goPreMenu">
+            {{ $t('cloud.preMenu') }}
+          </el-button>
         </div>
-        <el-button class="ms-auto" v-if="currentPath !== '/'" @click="goPreMenu">
-          {{ $t('cloud.preMenu') }}
-        </el-button>
-      </div>
-    </template>
-    <el-table :data="files" class="cloud-table">
-      <el-table-column :label="$t('cloud.name')">
-        <template #default="scope">
-          <el-icon>
-            <Folder v-if="scope.row.type === 'directory'" />
-            <DocumentCopy v-else />
-          </el-icon>
-          {{ scope.row.name }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="mtime" :label="$t('cloud.time')" />
-      <el-table-column prop="fmtSize" :label="$t('cloud.size')" />
-      <el-table-column :label="$t('cloud.operation')">
-        <template #default="scope">
-          <el-button
-            v-if="scope.row.type === 'directory'"
-            @click="currentPath += scope.row.name + '/'"
-          >
-            {{ $t('cloud.open') }}
-          </el-button>
-          <el-button v-else>
-            <el-link :href="`${persisted.fileAddr}/cloud${currentPath}${scope.row.name}`" target="_blank">
-              {{ $t('cloud.download') }}
-            </el-link>
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </el-card>
+      </template>
+      <el-table :data="files" class="cloud-table">
+        <el-table-column :label="$t('cloud.name')">
+          <template #default="scope">
+            <el-icon>
+              <Folder v-if="scope.row.type === 'directory'" />
+              <DocumentCopy v-else />
+            </el-icon>
+            {{ scope.row.name }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="mtime" :label="$t('cloud.time')" />
+        <el-table-column prop="fmtSize" :label="$t('cloud.size')" />
+        <el-table-column :label="$t('cloud.operation')">
+          <template #default="scope">
+            <el-button
+              v-if="scope.row.type === 'directory'"
+              @click="currentPath += scope.row.name + '/'"
+            >
+              {{ $t('cloud.open') }}
+            </el-button>
+            <el-button v-else>
+              <el-link :href="`${persisted.fileAddr}/cloud${currentPath}${scope.row.name}`" target="_blank">
+                {{ $t('cloud.download') }}
+              </el-link>
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+  </div>
 </template>
 
 <style scoped></style>

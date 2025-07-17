@@ -2,7 +2,7 @@
 import usePersistedStore from '@/stores/persisted'
 import {api} from '@/utils/axios'
 import type {Album, Image} from '@/utils/tables'
-import {Picture, Star} from '@element-plus/icons-vue'
+import {MoreFilled, Picture, Star} from '@element-plus/icons-vue'
 import {useRouteQuery} from '@vueuse/router'
 import type {EChartsOption} from 'echarts'
 import {computed} from 'vue'
@@ -51,7 +51,7 @@ const { t } = useI18n({ messages: {
     reviewCount: '总评论',
     likesCount: '总点赞',
 
-    createAlbum: '创建一个新相册',
+    createAlbum: '创建相册',
 
     popularAlbum: '最受欢迎相册',
   },
@@ -99,9 +99,14 @@ const albumLikeOption = computed<EChartsOption>(() => ({
       <div class="text-3xl font-bold">
         {{t('gallery')}}
       </div>
-      <div v-if="stats" class="flex justify-around items-center gap-4">
-        <el-statistic v-for="item, key in stats" :key="key" class="text-center" :title="t(key)" :value="item">
-        </el-statistic>
+      <div class="flex justify-around items-center gap-4">
+        <template v-if="stats">
+          <el-statistic v-for="item, key in stats" :key="key" class="text-center" :title="t(key)" :value="item">
+          </el-statistic>
+        </template>
+        <el-button round type="primary" @click="$router.push('/albums/new')">
+          {{t('createAlbum')}}
+        </el-button>
       </div>
     </el-card>
 
@@ -144,15 +149,26 @@ const albumLikeOption = computed<EChartsOption>(() => ({
       >
         <div class="text-white flex justify-between items-center">
           <span>{{album.label}}</span>
-          <el-button :icon="Picture" round>
-            {{album.imageCount}}
-          </el-button>
+          <div>
+            <el-button :icon="Picture" round>
+              {{album.imageCount}}
+            </el-button>
+            <el-dropdown class="ms-2">
+              <el-button circle :icon="MoreFilled" @click.stop>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="$router.push(`/albums/${album.slug}/edit`)">
+                    {{t('edit')}}
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    {{t('report')}}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </div>
-      </el-card>
-      <el-card shadow="hover">
-        <template #footer>
-          {{t('createAlbum')}}
-        </template>
       </el-card>
     </div>
 

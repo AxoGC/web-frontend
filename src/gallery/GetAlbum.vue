@@ -5,10 +5,11 @@ import {api} from '@/utils/axios'
 import {useRouteParams, useRouteQuery} from '@vueuse/router'
 import usePersistedStore from '@/stores/persisted'
 import {useI18n} from 'vue-i18n'
-import {EditPen, Setting, Star} from '@element-plus/icons-vue'
+import {EditPen, Setting, Star, Upload} from '@element-plus/icons-vue'
 
 const { t } = useI18n({ messages: {
   zh: {
+    uploadImage: '上传图片',
     reviewList: '评论列表',
     writeReview: '写评论',
     byTime: '按时间',
@@ -69,6 +70,9 @@ watch(
           </div>
         </template>
         <template #extra>
+          <el-button :icon="Upload" round @click="$router.push(`/albums/${slug}/new`)">
+            {{t('uploadImage')}}
+          </el-button>
           <el-button :icon="Setting" circle @click="isDialogOpen=true">
           </el-button>
         </template>

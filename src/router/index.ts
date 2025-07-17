@@ -147,8 +147,29 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/albums/new',
+    component: () => import('@/gallery/EditAlbum.vue'),
+    meta: {
+      activeIndex: '/albums',
+    },
+  },
+  {
     path: '/albums/:album',
     component: () => import('@/gallery/GetAlbum.vue'),
+    meta: {
+      activeIndex: '/albums',
+    },
+  },
+  {
+    path: '/albums/:album/new',
+    component: () => import('@/gallery/AddImage.vue'),
+    meta: {
+      activeIndex: '/albums',
+    },
+  },
+  {
+    path: '/albums/:album/edit',
+    component: () => import('@/gallery/EditAlbum.vue'),
     meta: {
       activeIndex: '/albums',
     },
@@ -174,10 +195,6 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/:type/:slug/new-review',
     component: () => import('@/views/EditReview.vue'),
-  },
-  {
-    path:'/test',
-    component: () => import('@/Test.vue'),
   },
 ]
 

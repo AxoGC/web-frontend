@@ -20,6 +20,8 @@ const i18n = createI18n({
     zh: {
       confirm: '确认',
       cancel: '取消',
+      edit: '编辑',
+      report: '举报',
 
       review: '评论',
 
@@ -36,6 +38,7 @@ const i18n = createI18n({
       slug: '标识',
       sort: '排序',
       reviewCount: '评论数量',
+      profile: '简介',
       user: {
         name: '用户名',
       },
