@@ -5,11 +5,11 @@ import AppFooter from '@/components/AppFooter.vue';
 </script>
 
 <template>
-  <el-config-provider :button="{ round: true }" :card="{ shadow: 'hover' }">
-    <div class="fixed top-0 left-0 w-full" style="z-index: 999;">
+  <el-config-provider :button="{ round: true }">
+    <div class="fixed top-0 left-0 w-full z-[999]">
       <nav-bar />
     </div>
-    <div style="height: 48px;"> </div>
+    <div class="h-[48px]"> </div>
     <router-view />
     <app-footer v-if="!$route.meta.noFooter" />
   </el-config-provider>

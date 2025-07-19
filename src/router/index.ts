@@ -22,207 +22,207 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/doc-groups',
-    component: () => import('@/pages/wiki/ListDocGroup.vue'),
+    component: () => import('@/views/wiki/ListDocGroup.vue'),
     meta: {
       activeIndex: '/doc-groups',
     },
   },
   {
     path: '/doc-groups/new',
-    component: () => import('@/pages/wiki/EditDocGroup.vue'),
+    component: () => import('@/views/wiki/EditDocGroup.vue'),
     meta: {
       activeIndex: '/doc-groups',
     },
   },
   {
     path: '/doc-groups/:docGroup/new',
-    component: () => import('@/pages/wiki/EditDoc.vue'),
+    component: () => import('@/views/wiki/EditDoc.vue'),
     meta: {
       activeIndex: '/doc-groups',
     },
   },
   {
     path: '/doc-groups/:docGroup/edit',
-    component: () => import('@/pages/wiki/EditDocGroup.vue'),
+    component: () => import('@/views/wiki/EditDocGroup.vue'),
     meta: {
       activeIndex: '/doc-groups',
     },
   },
   {
     path: '/docs/:doc',
-    component: () => import('@/pages/wiki/GetDoc.vue'),
+    component: () => import('@/views/wiki/GetDoc.vue'),
     meta: {
       activeIndex: '/doc-groups',
     },
   },
   {
     path: '/docs/:doc/edit',
-    component: () => import('@/pages/wiki/EditDoc.vue'),
+    component: () => import('@/views/wiki/EditDoc.vue'),
     meta: {
       activeIndex: '/doc-groups',
     },
   },
   {
     path: '/forum-groups',
-    component: () => import('@/pages/bbs/ListForumGroup.vue'),
+    component: () => import('@/views/bbs/ListForumGroup.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/forum-groups/new',
-    component: () => import('@/pages/bbs/EditForumGroup.vue'),
+    component: () => import('@/views/bbs/EditForumGroup.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/forum-groups/:forumGroup/edit',
-    component: () => import('@/pages/bbs/EditForumGroup.vue'),
+    component: () => import('@/views/bbs/EditForumGroup.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/forum-groups/:forumGroup/new',
-    component: () => import('@/pages/bbs/EditForum.vue'),
+    component: () => import('@/views/bbs/EditForum.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/forums/:forum',
-    component: () => import('@/pages/bbs/GetForum.vue'),
+    component: () => import('@/views/bbs/GetForum.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/forums/:forum/edit',
-    component: () => import('@/pages/bbs/EditForum.vue'),
+    component: () => import('@/views/bbs/EditForum.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/forums/:forum/new',
-    component: () => import('@/pages/bbs/EditPost.vue'),
+    component: () => import('@/views/bbs/EditPost.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/posts/:post',
-    component: () => import('@/pages/bbs/GetPost.vue'),
+    component: () => import('@/views/bbs/GetPost.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/posts/:post/edit',
-    component: () => import('@/pages/bbs/EditPost.vue'),
+    component: () => import('@/views/bbs/EditPost.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/bbs-news',
-    component: () => import('@/pages/bbs/BbsNews.vue'),
+    component: () => import('@/views/bbs/BbsNews.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/users',
-    component: () => import('@/pages/bbs/BbsMembers.vue'),
+    component: () => import('@/views/bbs/BbsMembers.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/users/:user',
-    component: () => import('@/pages/bbs/GetUser.vue'),
+    component: () => import('@/views/bbs/GetUser.vue'),
     meta: {
       activeIndex: '/forum-groups',
     },
   },
   {
     path: '/guilds',
-    component: () => import('@/pages/guild/ListGuild.vue'),
+    component: () => import('@/views/guild/ListGuild.vue'),
     meta: {
       activeIndex: '/guilds',
     },
   },
   {
     path: '/guilds/:guild',
-    component: () => import('@/pages/guild/GetGuild.vue'),
+    component: () => import('@/views/guild/GetGuild.vue'),
     meta: {
       activeIndex: '/guilds',
     },
   },
   {
     path: '/albums',
-    component: () => import('@/pages/gallery/ListAlbum.vue'),
+    component: () => import('@/views/gallery/ListAlbum.vue'),
     meta: {
       activeIndex: '/albums',
     },
   },
   {
     path: '/albums/new',
-    component: () => import('@/pages/gallery/EditAlbum.vue'),
+    component: () => import('@/views/gallery/EditAlbum.vue'),
     meta: {
       activeIndex: '/albums',
     },
   },
   {
     path: '/albums/:album',
-    component: () => import('@/pages/gallery/GetAlbum.vue'),
+    component: () => import('@/views/gallery/GetAlbum.vue'),
     meta: {
       activeIndex: '/albums',
     },
   },
   {
     path: '/albums/:album/new',
-    component: () => import('@/pages/gallery/AddImage.vue'),
+    component: () => import('@/views/gallery/AddImage.vue'),
     meta: {
       activeIndex: '/albums',
     },
   },
   {
     path: '/albums/:album/edit',
-    component: () => import('@/pages/gallery/EditAlbum.vue'),
+    component: () => import('@/views/gallery/EditAlbum.vue'),
     meta: {
       activeIndex: '/albums',
     },
   },
   {
     path: '/cloud',
-    component: () => import('@/pages/cloud/Cloud.vue'),
+    component: () => import('@/views/cloud/Cloud.vue'),
   },
   {
     path: '/servers',
-    component: () => import('@/pages/server/ListServer.vue'),
+    component: () => import('@/views/server/ListServer.vue'),
     meta: {
       activeIndex: '/servers',
     },
   },
   {
     path: '/servers/new',
-    component: () => import('@/pages/server/EditServer.vue'),
+    component: () => import('@/views/server/EditServer.vue'),
     meta: {
       activeIndex: '/servers',
     },
   },
   {
     path: '/servers/:server',
-    component: () => import('@/pages/server/GetServer.vue'),
+    component: () => import('@/views/server/GetServer.vue'),
     meta: {
       activeIndex: '/servers',
     },
   },
   {
     path: '/servers/:server/edit',
-    component: () => import('@/pages/server/EditServer.vue'),
+    component: () => import('@/views/server/EditServer.vue'),
     meta: {
       activeIndex: '/servers',
     },
