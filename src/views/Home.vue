@@ -11,12 +11,13 @@ api.get<any, Image[]>(`/carousels`).then(res => carousels.value = res)
 </script>
 
 <template>
-  <el-carousel class="relative" height="calc(100vh - 60px)">
+  <el-carousel class="relative" height="calc(100vh - 48px)">
     <el-carousel-item
       v-for="carousel in carousels"
       :key="carousel.id"
       class="bg-cover bg-center flex flex-col justify-end p-12"
       :style="{backgroundImage: `url(${persisted.imgAddr}/images/${carousel.filename})`}"
+      :interval="6000"
     >
       <div class="absolute z-10 inset-0 bg-black/15"></div>
       <div class="absolute z-20 text-white text-2xl">{{carousel.label}}</div>
