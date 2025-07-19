@@ -22,8 +22,10 @@ const i18n = createI18n({
       cancel: '取消',
       edit: '编辑',
       report: '举报',
+      details: '详情',
 
       review: '评论',
+      server: '服务器',
 
       gallery: '画廊',
 
@@ -31,6 +33,7 @@ const i18n = createI18n({
       game: '游戏',
       updatedAt: '更新于',
       title: '标题',
+      subTitle: '副标题',
       label: '名称',
       name: '名称',
       online: '在线',

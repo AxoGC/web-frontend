@@ -31,6 +31,7 @@ async function loadTable() {
 
 const { t } = useI18n({ messages: {
   zh: {
+    editForum: '编辑论坛',
     newPost: '发帖',
     recommend: '推荐内容',
   },
@@ -66,11 +67,11 @@ const recommendOptions = [
           </template>
           <template #extra>
             <div class="flex gap-2 flex-wrap justify-end">
+              <el-button @click="$router.push(`/forums/${slug}/edit`)">
+                {{t('editForum')}}
+              </el-button>
               <el-button @click="$router.push(`/forums/${slug}/new`)">
                 {{ t('newPost') }}
-              </el-button>
-              <el-button class="sm:hidden" @click="drawerStatus=true">
-                {{ $t('bbs.forum.forumInfo') }}
               </el-button>
             </div>
           </template>

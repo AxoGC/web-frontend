@@ -70,6 +70,27 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/forum-groups/new',
+    component: () => import('@/bbs/EditForumGroup.vue'),
+    meta: {
+      activeIndex: '/forum-groups',
+    },
+  },
+  {
+    path: '/forum-groups/:forumGroup/edit',
+    component: () => import('@/bbs/EditForumGroup.vue'),
+    meta: {
+      activeIndex: '/forum-groups',
+    },
+  },
+  {
+    path: '/forum-groups/:forumGroup/new',
+    component: () => import('@/bbs/EditForum.vue'),
+    meta: {
+      activeIndex: '/forum-groups',
+    },
+  },
+  {
     path: '/forums/:forum',
     component: () => import('@/bbs/GetForum.vue'),
     meta: {
@@ -186,8 +207,22 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/servers/new',
+    component: () => import('@/server/EditServer.vue'),
+    meta: {
+      activeIndex: '/servers',
+    },
+  },
+  {
     path: '/servers/:server',
     component: () => import('@/server/GetServer.vue'),
+    meta: {
+      activeIndex: '/servers',
+    },
+  },
+  {
+    path: '/servers/:server/edit',
+    component: () => import('@/server/EditServer.vue'),
     meta: {
       activeIndex: '/servers',
     },
