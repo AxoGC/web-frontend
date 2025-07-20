@@ -6,7 +6,7 @@ import { ref } from 'vue'
 
 
 
-export const languages = [
+export const langurages = [
   { id: 'en', label: 'English' },
   { id: 'zhCN', label: '简体中文' },
   { id: 'zhTW', label: '繁體中文' },
