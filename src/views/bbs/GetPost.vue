@@ -45,6 +45,9 @@ const  { t } = useI18n({ messages: {
 
       <div v-if="post.markdown" v-html="md.render(post.content)">
       </div>
+      <div v-else class="whitespace-pre-line">
+        {{post.content}}
+      </div>
 
     </el-card>
 
@@ -64,7 +67,6 @@ const  { t } = useI18n({ messages: {
 
       <template #footer>
         <el-pagination layout="prev, pager, next" :total="1000">
-
         </el-pagination>
       </template>
 

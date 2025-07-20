@@ -95,18 +95,18 @@ const recommendOptions = [
           <div
             v-for="post in forum.posts"
             :key="post.id"
-            class="even:bg-slate-100 hover:bg-slate-200 rounded-2xl p-2 flex flex-col md:flex-row justify-between items-center"
+            class="even:bg-slate-50 hover:bg-slate-100 rounded-2xl p-2 flex flex-col md:flex-row justify-between items-center"
             @click="router.push(`/posts/${post.slug}`)"
           >
-            <div>{{post.title}}</div>
-            <div class="text-sm text-slate-600">
+            <div class="basis-0 grow-[3]">{{post.title}}</div>
+            <div class="basis-0 grow text-sm text-slate-600">
               {{post.user.name}}
             </div>
             <div class="text-sm text-slate-600 block md:contents">
-              <span>
+              <span class="basis-0 grow">
                 {{post.reviewCount}} {{t('review')}}
               </span>
-              <span class="ms-2">
+              <span class="basis-0 grow-[2] ms-2">
                 {{t('updatedAt')}} {{dayjs(post.updatedAt).format('YYYY年MM月DD日 HH:mm')}}
               </span>
             </div>
