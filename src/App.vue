@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NavBar from '@/components/NavBar/NavBar.vue';
-import AppFooter from '@/components/AppFooter.vue';
+import AppFooter from '@/components/AppFooter/AppFooter.vue';
 
 </script>
 
@@ -10,7 +10,7 @@ import AppFooter from '@/components/AppFooter.vue';
       <nav-bar />
     </div>
     <div class="h-[48px]"> </div>
-    <router-view />
+    <router-view/>
     <app-footer v-if="!$route.meta.noFooter" />
   </el-config-provider>
 </template>
