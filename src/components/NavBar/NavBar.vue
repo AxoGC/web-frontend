@@ -51,6 +51,10 @@ const updateNavHeight = async () => {
   }
 }
 
+function resetMobileMenu(){
+  showMobileMenu.value = collapseRef.value.value = false
+}
+
 // 监听菜单状态变化，更新高度
 watch([showMenu, () => showMenuList.value.showLagurageMenu], () => {
   updateNavHeight()
@@ -125,7 +129,7 @@ watch(width, (newValue) => {
     </Transition>
 
     <Transition name="fade">
-      <nav-menu class="nav-ex" v-if="showMobileMenu" :isMobile="isMobile" :data="navbarItems" :type="'nav'" style="height: calc(100vh - 48px);"/>
+      <nav-menu class="nav-ex" v-if="showMobileMenu" :isMobile="isMobile" :data="navbarItems" :type="'nav'" style="height: calc(100vh - 48px);" @resetMobileMenu="resetMobileMenu"/>
     </Transition>
   </div>
 </template>
