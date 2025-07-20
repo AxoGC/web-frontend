@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import usePersistedStore from '@/stores/persisted';
 import {api} from '@/utils/axios';
 import type {Guild} from '@/utils/tables';
 import {useRouteQuery} from '@vueuse/router';
@@ -10,8 +11,12 @@ const { t } = useI18n({ messages: {
   zh: {
     guildList: '公会列表',
     createGuild: '创建公会',
+    myGuild: '我的公会',
+    members: '成员',
   },
 } })
+
+const persisted = usePersistedStore()
 
 const guilds = ref<Guild[]>([])
 const page = useRouteQuery('page', 1, { transform: Number })
@@ -46,8 +51,24 @@ watchEffect(async () => {
           v-for="guild in guilds"
           :key="guild.id"
           shadow="hover"
+          :style="{ backgroundImage: `url(${persisted.imgAddr}/guild-covers/${guild.slug})` }"
+          class="bg-cover bg-center relative"
+          body-class="h-full text-white flex flex-col gap-2"
         >
-          {{guild}}
+          <div class="z-10 flex items-center gap-2">
+            <el-avatar
+              :src="`${persisted.imgAddr}/guild-avatars/${guild.slug}`"
+              class="ring-2 ring-slate-200"
+            >
+            </el-avatar>
+            <div class="text-lg">{{guild.name}}</div>
+            <div class="ms-auto">{{guild.userCount}} {{t('members')}}</div>
+          </div>
+          <div class="z-10 truncate">{{guild.subTitle}}</div>
+          <div class="z-10">
+            {{t('admin')}}: {{guild.userGuilds.map(ug => ug.user.name).join(', ')}}
+          </div>
+          <div class="inset-0 absolute bg-black/40"></div>
         </el-card>
 
       </el-card>
@@ -55,7 +76,15 @@ watchEffect(async () => {
     </div>
 
     <div class="grow flex flex-col gap-4">
-
+      <el-card
+        shadow="hover"
+        header-class="flex justify-between items-center"
+      >
+        <template #header>
+          <div>{{t('myGuild')}}</div>
+          <el-button type="primary">{{t('details')}}</el-button>
+        </template>
+      </el-card>
     </div>
 
   </div>
