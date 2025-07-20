@@ -99,7 +99,7 @@ const { t } = useI18n({ messages: {
         circle
         @click="$router.push('/doc-groups/new')"
       ></el-button>
-      <div>{{t('add')}}</div>
+      <div>{{t('addDocGroup')}}</div>
     </el-card>
   </div>
 

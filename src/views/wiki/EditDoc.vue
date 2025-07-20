@@ -3,14 +3,11 @@ import {api} from '@/utils/axios';
 import md from '@/utils/markdown';
 import type {Doc} from '@/utils/tables';
 import {useRouteParams} from '@vueuse/router';
-import {onMounted} from 'vue';
 import {reactive} from 'vue';
 import {ref} from 'vue';
 import {useI18n} from 'vue-i18n';
-import {useRoute} from 'vue-router';
 
-const docGroupSlug = useRouteParams<string>('docGroup')
-const docSlug = useRouteParams<string>('doc')
+const param = useRouteParams<string|undefined>('doc')
 
 const form = reactive({
   title: '',
@@ -19,35 +16,29 @@ const form = reactive({
   sort: 0,
 })
 
-const route = useRoute()
 const preview = ref(false)
 
-async function loadForm() {
-  const doc = await api.get<any, Doc>(`/docs/${docSlug.value}`)
-  form.title = doc.title
-  form.slug = doc.slug
-  form.content = doc.content
-  form.sort = doc.sort
+if (param.value) {
+  api.get<any, Doc>(`/docs/${param.value}`).then(res => ({
+    title: form.title,
+    slug: form.slug,
+    content: form.content,
+    sort: form.sort,
+  } = res))
 }
-
-onMounted(async () => {
-
-  if (route.params.docSlug) {
-    loadForm()
-  }
-
-  if (route.params.docGroupSlug) {
-    try {
-    } catch {}
-  }
-
-})
 
 function clearForm() {
   form.title = ''
   form.slug = ''
   form.content = ''
   form.sort = 0
+}
+
+async function submit() {
+  if (param.value) {
+  } else {
+
+  }
 }
 
 const { t } = useI18n({ messages: {
@@ -67,28 +58,7 @@ const { t } = useI18n({ messages: {
 </script>
 
 <template>
-  <div class="h-full max-w-5xl mx-auto flex p-2 gap-4">
-
-    <el-card shadow="hover" class="grow min-w-0 flex flex-col" body-class="grow">
-
-      <template #header>
-        <el-page-header @back="$router.back">
-          <template #content>
-            {{true ? t('editDoc') : t('addDoc')}}
-          </template>
-        </el-page-header>
-      </template>
-
-      <div v-if="preview" v-html="md.render(form.content)"></div>
-      <el-input v-else type="textarea" v-model="form.content" show-word-limit maxlength="1000" :autosize="{ minRows: 10 }" />
-
-      <template #footer>
-        <el-button type="primary" round>
-          {{ t('confirm') }}
-        </el-button>
-      </template>
-
-    </el-card>
+  <div class="h-full max-w-5xl mx-auto flex flex-col md:flex-row-reverse p-4 gap-4">
 
     <el-card shadow="hover" class="shrink-0">
       <el-form :model="form">
@@ -113,12 +83,36 @@ const { t } = useI18n({ messages: {
           <el-button @click="clearForm">
             {{t('clear')}}
           </el-button>
-          <el-button v-if="route.params.docSlug" @click="loadForm">
-            {{t('reload')}}
-          </el-button>
         </el-form-item>
 
       </el-form>
+    </el-card>
+
+    <el-card shadow="hover" class="grow min-w-0">
+
+      <template #header>
+        <el-page-header @back="$router.back">
+          <template #content>
+            {{true ? t('editDoc') : t('addDoc')}}
+          </template>
+          <template #extra>
+            <el-button type="primary" round>
+              {{ t('confirm') }}
+            </el-button>
+          </template>
+        </el-page-header>
+      </template>
+
+      <div v-if="preview" v-html="md.render(form.content)"></div>
+      <el-input
+        v-else
+        type="textarea"
+        v-model="form.content"
+        show-word-limit
+        maxlength="1000"
+        :autosize="{ minRows: 10 }"
+      />
+
     </el-card>
 
   </div>
