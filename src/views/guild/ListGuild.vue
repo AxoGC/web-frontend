@@ -3,7 +3,7 @@ import usePersistedStore from '@/stores/persisted';
 import {api} from '@/utils/axios';
 import type {Guild} from '@/utils/tables';
 import {useRouteQuery} from '@vueuse/router';
-import {watch, watchEffect} from 'vue';
+import {watchEffect} from 'vue';
 import {ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 
@@ -53,7 +53,8 @@ watchEffect(async () => {
           shadow="hover"
           :style="{ backgroundImage: `url(${persisted.imgAddr}/guild-covers/${guild.slug})` }"
           class="bg-cover bg-center relative"
-          body-class="h-full text-white flex flex-col gap-2"
+          body-class="h-full text-white flex flex-col gap-2 group"
+          @click="$router.push(`/guilds/${guild.slug}`)"
         >
           <div class="z-10 flex items-center gap-2">
             <el-avatar
@@ -68,7 +69,8 @@ watchEffect(async () => {
           <div class="z-10">
             {{t('admin')}}: {{guild.userGuilds.map(ug => ug.user.name).join(', ')}}
           </div>
-          <div class="inset-0 absolute bg-black/40"></div>
+          <div class="inset-0 absolute bg-black/40 transition-colors duration-300 group-hover:bg-black/20">
+          </div>
         </el-card>
 
       </el-card>
