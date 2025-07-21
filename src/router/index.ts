@@ -9,6 +9,7 @@ declare module 'vue-router' {
       icon?: object,
     },
     activeIndex?: string,
+    noFooter?: boolean,
   }
 }
 
@@ -231,6 +232,14 @@ export const routes: RouteRecordRaw[] = [
     path: '/:type/:slug/new-review',
     component: () => import('@/views/EditReview.vue'),
   },
+  {
+    path: '/:catchAll(.*)',
+    name: '404',
+    component: () => import('@/views/404.vue'),
+    meta: {
+      noFooter: true,
+    },
+  }
 ]
 
 const router = createRouter({

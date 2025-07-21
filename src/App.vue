@@ -2,6 +2,24 @@
 import NavBar from '@/components/NavBar/NavBar.vue';
 import AppFooter from '@/components/AppFooter/AppFooter.vue';
 
+const web = window.location
+console.log(web)
+const getWebName = () => {
+  let name = ''
+  if(web.protocol === 'https:'){
+    name = 'Axolotland'
+  }else{
+    switch (web.hostname) {
+      case 'localhost':
+        name = 'Axo-Developing'
+        break
+      default:
+        name = web.hostname
+    }
+  }
+  document.title = name
+}
+getWebName()
 </script>
 
 <template>
