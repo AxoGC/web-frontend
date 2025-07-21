@@ -3,18 +3,19 @@ import {api} from '@/utils/axios';
 import {formatDate} from '@/utils/chrono';
 import md from '@/utils/markdown';
 import {type Post} from '@/utils/tables';
+import {EditPen} from '@element-plus/icons-vue';
 import {useRouteParams, useRouteQuery} from '@vueuse/router';
 import dayjs from 'dayjs';
 import {watchEffect} from 'vue';
 import {ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 
-const slug = useRouteParams<string>('post')
+const param = useRouteParams<string>('post')
 const post = ref<Post|null>(null)
 const page = useRouteQuery('page', 1, { transform: Number })
 const pageSize = useRouteQuery('page_size', 10, { transform: Number })
 watchEffect(async () => {
-  post.value = await api.get<any, Post>(`/posts/${slug.value}?page=${page.value}&page_size=${pageSize.value}`)
+  post.value = await api.get<any, Post>(`/posts/${param.value}?page=${page.value}&page_size=${pageSize.value}`)
 })
 
 const  { t } = useI18n({ messages: {
@@ -56,10 +57,13 @@ const  { t } = useI18n({ messages: {
 
     <div class="card space-y-4">
 
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <div>
           {{t('reviewTitle')}}
         </div>
+        <el-button round :icon="EditPen" @click="$router.push(`/posts/${param}/new-review`)">
+          {{t('writeReview')}}
+        </el-button>
       </div>
 
       <div>
