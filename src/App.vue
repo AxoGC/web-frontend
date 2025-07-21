@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import NavBar from '@/components/NavBar/NavBar.vue';
 import AppFooter from '@/components/AppFooter/AppFooter.vue';
+import FloatCard from './components/FloatCard.vue';
 
 const web = window.location
 console.log(web)

@@ -12,6 +12,7 @@ const { t } = useI18n({ messages: {
     guildList: '公会列表',
     createGuild: '创建公会',
     myGuild: '我的公会',
+    admin: '管理员',
     members: '成员',
   },
 } })
@@ -32,61 +33,56 @@ watchEffect(async () => {
 <template>
   <div class="flex flex-col md:flex-row gap-4 p-4">
 
-    <div class="grow-[2] flex flex-col gap-4">
+    <div class="grow-[2] space-y-4">
 
-      <el-card
-        shadow="hover"
-        header-class="flex justify-between items-center"
-        body-class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4"
-      >
+      <div class="card">
 
-        <template #header>
+        <div class="mx-4 flex justify-between items-center">
           <div>{{t('guildList')}}</div>
           <el-button type="primary" @click="$router.push('/guilds/new')">
             {{t('createGuild')}}
           </el-button>
-        </template>
+        </div>
 
-        <el-card
-          v-for="guild in guilds"
-          :key="guild.id"
-          shadow="hover"
-          :style="{ backgroundImage: `url(${persisted.imgAddr}/guild-covers/${guild.slug})` }"
-          class="bg-cover bg-center relative"
-          body-class="h-full text-white flex flex-col gap-2 group"
-          @click="$router.push(`/guilds/${guild.slug}`)"
-        >
-          <div class="z-10 flex items-center gap-2">
-            <el-avatar
-              :src="`${persisted.imgAddr}/guild-avatars/${guild.slug}`"
-              class="ring-2 ring-slate-200"
-            >
-            </el-avatar>
-            <div class="text-lg">{{guild.name}}</div>
-            <div class="ms-auto">{{guild.userCount}} {{t('members')}}</div>
-          </div>
-          <div class="z-10 truncate">{{guild.subTitle}}</div>
-          <div class="z-10">
-            {{t('admin')}}: {{guild.userGuilds.map(ug => ug.user.name).join(', ')}}
-          </div>
-          <div class="inset-0 absolute bg-black/40 transition-colors duration-300 group-hover:bg-black/20">
-          </div>
-        </el-card>
+        <div class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4">
 
-      </el-card>
+          <div
+            v-for="guild in guilds"
+            :key="guild.id"
+            :style="{ backgroundImage: `url(${persisted.imgAddr}/guild-covers/${guild.slug})` }"
+            class="card bg-cover bg-center relative hover:scale-[1.02] text-white group space-y-2"
+            @click="$router.push(`/guilds/${guild.slug}`)"
+          >
+            <div class="inset-0 absolute bg-black/40 transition duration-300 group-hover:bg-black/20">
+            </div>
+            <div class="relative flex items-center gap-2">
+              <el-avatar
+                :src="`${persisted.imgAddr}/guild-avatars/${guild.slug}`"
+                class="ring-2 ring-slate-200"
+              >
+              </el-avatar>
+              <div class="text-lg">{{guild.name}}</div>
+              <div class="ms-auto">{{guild.userCount}} {{t('members')}}</div>
+            </div>
+            <div class="relative truncate">{{guild.subTitle}}</div>
+            <div class="relative truncate">
+              {{t('admin')}}: {{guild.userGuilds.map(ug => ug.user.name).join(', ')}}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 
-    <div class="grow flex flex-col gap-4">
-      <el-card
-        shadow="hover"
-        header-class="flex justify-between items-center"
-      >
-        <template #header>
+    <div class="grow space-y-4">
+      <div class="card">
+        <div class="flex justify-between items-center">
           <div>{{t('myGuild')}}</div>
           <el-button type="primary">{{t('details')}}</el-button>
-        </template>
-      </el-card>
+        </div>
+      </div>
     </div>
 
   </div>

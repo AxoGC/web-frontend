@@ -83,9 +83,11 @@ export interface Guild {
   name: string
   slug: string
   userCount: number
+  subTitle: string
   profile: string
   notice: string
   money: number
+  userGuilds: UserGuild[]
 }
 
 export interface DocGroup {

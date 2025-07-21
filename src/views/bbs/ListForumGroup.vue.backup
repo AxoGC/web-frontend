@@ -92,12 +92,14 @@ const postCountChartOption = computed<EChartsOption>(() => {
           </el-dropdown>
         </template>
         <div class="mt-2 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-2">
-          <div v-for="forum in forumGroup.forums" :key="forum.title"
-            class="card h-48 hover:translate-x-1 group bg-cover bg-center relative duration-300"
-            :style="{backgroundImage: `url(${persisted.fileAddr}/forum-covers/${forum.slug})`}"
+          <el-card v-for="forum in forumGroup.forums" :key="forum.title"
+            class="hover:translate-x-1 group"
+            body-class="aspect-video bg-cover bg-center flex flex-col justify-end text-white relative"
+            :body-style="{backgroundImage: `url(${persisted.fileAddr}/forum-covers/${forum.slug})`}"
+            shadow="hover"
             @click="$router.push(`/forums/${forum.slug}`)"
           >
-            <div class="absolute bottom-5 inset-x-5 z-10 text-white">
+            <div class="z-10">
               <h3 class="text-xl font-bold mb-2">{{forum.title}}</h3>
               <div class="flex items-center">
                 <p class="line-clamp-2 truncate">{{forum.subTitle}}</p>
@@ -108,7 +110,7 @@ const postCountChartOption = computed<EChartsOption>(() => {
               </div>
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent transition-opacity duration-300 group-hover:opacity-30" />
-          </div>
+          </el-card>
         </div>
       </el-card>
     </div>
@@ -122,10 +124,6 @@ const postCountChartOption = computed<EChartsOption>(() => {
 
       <recommended-content>
       </recommended-content>
-
-      <div class="card">
-
-      </div>
 
     </div>
   </div>

@@ -102,5 +102,4 @@ const { t } = useI18n({ messages: {
       <div>{{t('addDocGroup')}}</div>
     </el-card>
   </div>
-
 </template>
