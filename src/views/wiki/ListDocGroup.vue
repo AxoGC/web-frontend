@@ -46,13 +46,10 @@ const { t } = useI18n({ messages: {
 
 <template>
   <div class="max-w-5xl mx-auto columns-2xs gap-4 space-y-4 p-4">
-  <!--
-  <div class="min-h-full max-w-5xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
-  -->
     <div
       v-for="docGroup in docGroups"
       :key="docGroup.id"
-      class="card self-start space-y-4"
+      class="card space-y-4"
     >
 
       <div class="flex justify-between">

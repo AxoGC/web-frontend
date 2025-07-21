@@ -41,9 +41,9 @@ const { t } = useI18n({ messages: {
 
 <template>
   <div v-if="doc" class="max-w-5xl mx-auto space-y-4 p-4">
-    <el-card shadow="hover">
+    <div class="card space-y-4">
 
-      <template #header>
+      <div>
         <el-page-header @back="$router.back">
           <template v-if="doc" #content>
             {{doc.user.name}} {{t('updatedAt')}} {{dayjs(doc.updatedAt).format('MM月DD日 HH:mm')}}
@@ -55,34 +55,33 @@ const { t } = useI18n({ messages: {
             </el-button>
           </template>
         </el-page-header>
-      </template>
+      </div>
 
-      <template #default>
+      <div>
         <h1>
           {{doc.title}}
         </h1>
         <article v-html="session.md.render(doc.content)">
         </article>
-      </template>
-    </el-card>
+      </div>
+    </div>
 
-    <el-card header-class="flex justify-between items-center" shadow="hover">
+    <div class="card space-y-4">
 
-      <template #header>
+      <div class="flex justify-between items-center">
         <span>{{t('reviewList')}}</span>
         <el-button :icon="EditPen" round @click="$router.push(`/docs/${slug}/new-review`)">{{t('writeReview')}}</el-button>
-      </template>
+      </div>
 
-      <template #footer>
+      <div>
         <el-pagination
           layout="sizes, prev, pager, next, total"
           v-model:current-page="page"
           v-model:page-size="pageSize"
           :total="doc.reviewCount"
-        >
-        </el-pagination>
-      </template>
+        ></el-pagination>
+      </div>
 
-    </el-card>
+    </div>
   </div>
 </template>
