@@ -143,6 +143,7 @@ const postCountChartOption = computed<EChartsOption>(() => {
             v-for="recommend in recommends"
             :key="recommend.id"
             class="even:bg-slate-50 hover:bg-slate-100 rounded-2xl p-2 duration-300"
+            @click="$router.push(`/posts/${recommend.slug}`)"
           >
             <div>{{recommend.title}}</div>
             <div class="text-slate-600 text-sm flex">

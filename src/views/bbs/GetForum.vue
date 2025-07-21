@@ -144,6 +144,7 @@ watchEffect(async () => {
             v-for="recommend in recommends"
             :key="recommend.id"
             class="rounded-2xl p-2 even:bg-slate-50 hover:bg-slate-100 duration-300"
+            @click="$router.push(`/posts/${recommend.slug}`)"
           >
             <div>
               {{recommend.title}}
