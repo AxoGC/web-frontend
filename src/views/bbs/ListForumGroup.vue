@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type {ForumGroup} from '@/utils/tables';
-import {ref} from 'vue';
+import type {ForumGroup, Post} from '@/utils/tables';
+import {ref, watchEffect} from 'vue';
 import {api} from '@/utils/axios';
 import usePersistedStore from '@/stores/persisted';
 import {useI18n} from 'vue-i18n';
@@ -11,8 +11,8 @@ import {CanvasRenderer} from 'echarts/renderers';
 import {computed} from 'vue';
 import type {EChartsOption} from 'echarts';
 import VChart from 'vue-echarts';
-import RecommendedContent from './RecommendedContent.vue';
 import {Setting} from '@element-plus/icons-vue';
+import dayjs from 'dayjs';
 
 const forumGroups = ref<ForumGroup[]>([])
 const persisted = usePersistedStore()
@@ -35,6 +35,18 @@ const { t } = useI18n({ messages: {
 
   },
 } })
+
+const recommendOption = ref('popular')
+const recommends = ref<Post[]>([])
+
+watchEffect(async () => {
+  recommends.value = await api.get<any, Post[]>(`/recommends?option=${recommendOption.value}`)
+})
+
+const recommendOptions = [
+  { label: t('popular'), value: 'popular' },
+  { label: t('latest'), value: 'latest' },
+]
 
 use([TitleComponent, PieChart, CanvasRenderer, TooltipComponent])
 
@@ -68,14 +80,13 @@ const postCountChartOption = computed<EChartsOption>(() => {
 
 <template>
   <div class="p-4 flex flex-col md:flex-row gap-4">
-    <div v-if="forumGroups" class="grow flex flex-col gap-4">
-      <el-card
-        header-class="flex justify-between items-center"
+    <div v-if="forumGroups" class="grow-[10] space-y-4">
+      <div
         v-for="forumGroup in forumGroups"
         :key="forumGroup.id"
-        shadow="hover"
+        class="card"
       >
-        <template #header>
+        <div class="flex justify-between items-center">
           <div class="text-lg ms-4">{{ forumGroup.label }}</div>
           <el-dropdown>
             <el-button :icon="Setting" circle></el-button>
@@ -90,14 +101,16 @@ const postCountChartOption = computed<EChartsOption>(() => {
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-        </template>
-        <div class="mt-2 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-2">
+        </div>
+        <div class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
           <div v-for="forum in forumGroup.forums" :key="forum.title"
-            class="card h-48 hover:translate-x-1 group bg-cover bg-center relative duration-300"
+            class="card h-48 hover:scale-[1.02] group bg-cover bg-center relative duration-300"
             :style="{backgroundImage: `url(${persisted.fileAddr}/forum-covers/${forum.slug})`}"
             @click="$router.push(`/forums/${forum.slug}`)"
           >
-            <div class="absolute bottom-5 inset-x-5 z-10 text-white">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent transition-opacity duration-300 group-hover:opacity-30">
+            </div>
+            <div class="absolute bottom-5 inset-x-5 text-white">
               <h3 class="text-xl font-bold mb-2">{{forum.title}}</h3>
               <div class="flex items-center">
                 <p class="line-clamp-2 truncate">{{forum.subTitle}}</p>
@@ -107,32 +120,40 @@ const postCountChartOption = computed<EChartsOption>(() => {
                 </el-icon>
               </div>
             </div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent transition-opacity duration-300 group-hover:opacity-30" />
           </div>
         </div>
-      </el-card>
+      </div>
     </div>
     <el-empty v-else :description="$t('bbs.home.empty')" />
 
-    <div class="flex flex-col gap-4">
+    <div class="grow space-y-4">
 
-      <el-card class="h-64" shadow="hover" body-class="h-full">
+      <div class="card h-64">
         <v-chart :option="postCountChartOption" autoresize />
-      </el-card>
+      </div>
 
-      <recommended-content>
-      </recommended-content>
-
-      <div class="card">
-
+      <div class="card mt-4">
+        <div class="flex justify-between items-center">
+          <div>{{t('recommend')}}</div>
+          <el-segmented v-model="recommendOption" :options="recommendOptions">
+          </el-segmented>
+        </div>
+        <div class="mt-4">
+          <div
+            v-for="recommend in recommends"
+            :key="recommend.id"
+            class="even:bg-slate-50 hover:bg-slate-100 rounded-2xl p-2 duration-300"
+          >
+            <div>{{recommend.title}}</div>
+            <div class="text-slate-600 text-sm flex">
+              <div>{{recommend.user.name}}</div>
+              <div class="ms-2">{{recommend.reviewCount}} {{t('review')}}</div>
+              <div class="ms-auto">{{dayjs(recommend.updatedAt).format('MM月DD日 HH:mm')}}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
   </div>
 </template>
-
-<style>
-.recommend-option {
-  --el-border-radius-base: 16px;
-}
-</style>

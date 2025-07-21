@@ -1,32 +1,27 @@
 <script setup lang="ts">
-import ForumInfo from './ForumInfo.vue';
 import type {Forum, Post} from '@/utils/tables';
-import {ref} from 'vue';
+import {ref, watchEffect} from 'vue';
 import {useRouter} from 'vue-router';
-import {formatDate} from '@/utils/chrono';
 import usePersistedStore from '@/stores/persisted';
 import {api} from '@/utils/axios';
-import {watch} from 'vue';
 import {useRouteParams, useRouteQuery} from '@vueuse/router';
 import {useI18n} from 'vue-i18n';
 import dayjs from 'dayjs';
 
 const persisted = usePersistedStore()
-const drawerStatus = ref(false)
 const router = useRouter()
 const forum = ref<Forum|null>(null)
-const page = useRouteQuery('page', 1, {transform: Number})
-const pageSize = useRouteQuery('page_size', 10, {transform: Number})
-const slug = useRouteParams<string>('forum')
+const page = useRouteQuery('page', 1, { transform: Number })
+const pageSize = useRouteQuery('page_size', 10, { transform: Number })
+const param = useRouteParams<string>('forum')
 
-watch([page, pageSize], loadTable, {immediate: true})
+watchEffect(loadTable)
 
 async function loadTable() {
-  const res = await api.get<any, Forum>(`/forums/${slug.value}`, {params: {
+  forum.value = await api.get<any, Forum>(`/forums/${param.value}`, {params: {
     page: page.value,
     page_size: pageSize.value,
   }})
-  forum.value = res
 }
 
 const { t } = useI18n({ messages: {
@@ -37,24 +32,35 @@ const { t } = useI18n({ messages: {
   },
 } })
 
-const currentRecommendOption = ref('popular')
+const recommendOption = ref('popular')
 const recommendOptions = [
-
+  {
+    label: t('popular'),
+    value: 'popular',
+  },
+  {
+    label: t('latest'),
+    value: 'latest',
+  },
 ]
+
+const recommends = ref<Post[]>([])
+watchEffect(async () => {
+  recommends.value = await api.get<any,Post[]>(`/recommends?option=${recommendOption.value}&forum=${param.value}`)
+})
 
 </script>
 
 <template>
   <div v-if="forum" class="flex flex-col md:flex-row p-4 gap-4">
-    <div class="grow-[2] flex flex-col gap-4">
+    <div class="grow-[2] space-y-4">
 
-      <el-card
-        shadow="hover"
-        body-class="relative bg-cover bg-center"
-        :body-style="{backgroundImage: `url(${persisted.fileAddr}/forum-covers/${forum.slug})`}"
-        >
-        <div class="absolute inset-0 bg-black/15" />
-        <el-page-header class="relative text-white z-10" @back="$router.back">
+      <div
+        class="card relative bg-cover bg-center"
+        :style="{backgroundImage: `url(${persisted.fileAddr}/forum-covers/${forum.slug})`}"
+      >
+        <div class="absolute inset-0 bg-black/15"></div>
+        <el-page-header class="relative text-white" @back="$router.back">
           <template #content>
             <div class="flex gap-2 flex-wrap">
               <span class="text-white">
@@ -67,35 +73,25 @@ const recommendOptions = [
           </template>
           <template #extra>
             <div class="flex gap-2 flex-wrap justify-end">
-              <el-button @click="$router.push(`/forums/${slug}/edit`)">
+              <el-button @click="$router.push(`/forums/${param}/edit`)">
                 {{t('editForum')}}
               </el-button>
-              <el-button @click="$router.push(`/forums/${slug}/new`)">
+              <el-button @click="$router.push(`/forums/${param}/new`)">
                 {{ t('newPost') }}
               </el-button>
             </div>
           </template>
         </el-page-header>
-      </el-card>
+      </div>
 
-      <el-card shadow="hover">
-        <!--
-        <el-table v-if="forum" :data="forum.posts" @row-click="(row:any)=>router.push(`/posts/${row.slug}`)">
-          <el-table-column prop="updatedAt" :label="t('updatedAt')" :formatter="(row:Post)=>formatDate(row.updatedAt)">
-          </el-table-column>
-          <el-table-column prop="title" :label="t('title')">
-          </el-table-column>
-          <el-table-column prop="user.name" :label="t('user.name')">
-          </el-table-column>
-          <el-table-column prop="reviewCount" :label="t('reviewCount')">
-          </el-table-column>
-        </el-table>
-        -->
+      <div class="card">
+
         <div v-if="forum" class="flex flex-col">
           <div
             v-for="post in forum.posts"
             :key="post.id"
-            class="even:bg-slate-50 hover:bg-slate-100 rounded-2xl p-2 flex flex-col md:flex-row justify-between items-center"
+            class="even:bg-slate-50 hover:bg-slate-100 rounded-2xl
+              p-2 flex flex-col md:flex-row justify-between md:items-center duration-300"
             @click="router.push(`/posts/${post.slug}`)"
           >
             <div class="basis-0 grow-[3]">{{post.title}}</div>
@@ -114,34 +110,47 @@ const recommendOptions = [
         </div>
         <el-skeleton v-else class="grow" :rows="5" />
 
-        <template #footer>
-          <el-pagination layout="sizes,prev,pager,next,total" :total="1000"
-            v-model:current-page="page" v-model:page-size="pageSize"
-          />
-        </template>
-      </el-card>
+        <div class="mt-4">
+          <el-pagination
+            layout="sizes, prev, pager, next, total"
+            :total="forum.postCount"
+            v-model:current-page="page"
+            v-model:page-size="pageSize"
+          ></el-pagination>
+        </div>
+      </div>
 
     </div>
 
-    <div class="grow flex flex-col gap-4">
+    <div class="grow space-y-4">
 
-      <el-card class="row-span-2" shadow="hover">
-        <forum-info :forum="forum" />
-      </el-card>
+      <div class="card">
 
-      <el-card
-        shadow="hover"
-        header-class="flex justify-between items-center"
-      >
-        <template #header>
+        <div class="flex justify-between items-center">
           <div>{{t('recommend')}}</div>
-        </template>
-      </el-card>
+          <el-segmented v-model="recommendOption" :options="recommendOptions">
+          </el-segmented>
+        </div>
+
+        <div class="mt-4">
+          <div
+            v-for="recommend in recommends"
+            :key="recommend.id"
+            class="rounded-2xl p-2 even:bg-slate-50 hover:bg-slate-100 duration-300"
+          >
+            <div>
+              {{recommend.title}}
+            </div>
+            <div class="flex text-sm text-slate-600">
+              <div>{{recommend.user.name}}</div>
+              <div class="ms-2">{{recommend.reviewCount}} {{t('review')}}</div>
+              <div class="ms-auto">{{dayjs(recommend.updatedAt).format('MM月DD日 HH:mm')}}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
 
     </div>
   </div>
-
-  <el-drawer size="60%" v-model="drawerStatus">
-    <forum-info :forum="forum" />
-  </el-drawer>
 </template>

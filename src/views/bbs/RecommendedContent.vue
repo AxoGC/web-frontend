@@ -3,9 +3,8 @@ import {api} from '@/utils/axios';
 import type {Post} from '@/utils/tables';
 import {Setting} from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
-import {ref, watch} from 'vue';
+import {ref, watchEffect} from 'vue';
 import {useI18n} from 'vue-i18n';
-
 
 const { t } = useI18n({ messages: {
   zh: {
@@ -15,20 +14,6 @@ const { t } = useI18n({ messages: {
 
   },
 } })
-
-const currentRecommendOption = ref('popular')
-const recommendCount = ref(10)
-
-const recommends = ref<Post[]>([])
-
-watch([recommendCount, currentRecommendOption], async ([recommendCount, currentRecommendOption]) => {
-  recommends.value = await api.get<any, Post[]>(`/recommends?option=${currentRecommendOption}&count=${recommendCount}`)
-}, { immediate: true })
-
-const recommendOptions = [
-  { label: t('popular'), value: 'popular' },
-  { label: t('latest'), value: 'latest' },
-]
 </script>
 
 <template>
@@ -41,7 +26,7 @@ const recommendOptions = [
     <template #header>
       <div>{{t('recommend')}}</div>
       <el-button :icon="Setting" circle class="ms-auto"></el-button>
-      <el-segmented v-model="currentRecommendOption" :options="recommendOptions" class="recommend-option">
+      <el-segmented v-model="recommendOption" :options="recommendOptions" class="recommend-option">
       </el-segmented>
     </template>
     <div

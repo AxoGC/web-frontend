@@ -95,11 +95,11 @@ const albumLikeOption = computed<EChartsOption>(() => ({
 <template>
   <div class="mx-auto max-w-5xl p-4 space-y-4">
 
-    <el-card shadow="hover" body-class="flex justify-between items-center">
+    <div class="card flex justify-between items-center">
       <div class="text-3xl font-bold">
         {{t('gallery')}}
       </div>
-      <div class="flex justify-around items-center gap-4">
+      <div class="flex items-center gap-4">
         <template v-if="stats">
           <el-statistic v-for="item, key in stats" :key="key" class="text-center" :title="t(key)" :value="item">
           </el-statistic>
@@ -108,7 +108,7 @@ const albumLikeOption = computed<EChartsOption>(() => ({
           {{t('createAlbum')}}
         </el-button>
       </div>
-    </el-card>
+    </div>
 
     <div class="flex flex-col md:flex-row gap-4">
       <el-carousel class="h-48 grow relative" height="100%" type="card">
@@ -138,16 +138,16 @@ const albumLikeOption = computed<EChartsOption>(() => ({
       </v-chart>
     </div>
 
-    <div class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-2">
-      <el-card
+    <div class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4">
+      <div
         v-for="album in albums" :key="album.id"
-        class="aspect-video"
-        body-class="h-full flex flex-col justify-end bg-cover"
-        :body-style="{backgroundImage: `url(${persisted.imgAddr}/album-covers/${album.slug})`}"
-        shadow="hover"
+        class="card h-48 relative bg-cover bg-center hover:scale-[1.02] group"
+        :style="{backgroundImage: `url(${persisted.imgAddr}/album-covers/${album.slug})`}"
         @click="$router.push(`/albums/${album.slug}`)"
       >
-        <div class="text-white flex justify-between items-center">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent transition-opacity duration-300 group-hover:opacity-30">
+        </div>
+        <div class="absolute bottom-5 inset-x-5 text-white flex justify-between items-center">
           <span>{{album.label}}</span>
           <div>
             <el-button :icon="Picture" round>
@@ -169,7 +169,7 @@ const albumLikeOption = computed<EChartsOption>(() => ({
             </el-dropdown>
           </div>
         </div>
-      </el-card>
+      </div>
     </div>
 
   </div>
