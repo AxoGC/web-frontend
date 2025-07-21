@@ -49,16 +49,13 @@ const { t } = useI18n({ messages: {
   <!--
   <div class="min-h-full max-w-5xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
   -->
-    <el-card
+    <div
       v-for="docGroup in docGroups"
       :key="docGroup.id"
-      shadow="hover"
-      class="self-start"
-      header-class="flex justify-between"
-      body-class="flex flex-col gap-2"
+      class="card self-start space-y-4"
     >
 
-      <template #header>
+      <div class="flex justify-between">
         <div>
           {{docGroup.label}}
         </div>
@@ -79,20 +76,23 @@ const { t } = useI18n({ messages: {
             </el-dropdown-item>
           </template>
         </el-dropdown>
-      </template>
+      </div>
 
-      <el-button
-        v-for="doc in docGroup.docs"
-        :key="doc.id"
-        @click="$router.push(`/docs/${doc.slug}`)"
-        class="w-full !ms-0"
-        round
-      >
-        {{doc.title}}
-      </el-button>
+      <div class="space-y-2">
+        <el-button
+          v-for="doc in docGroup.docs"
+          :key="doc.id"
+          @click="$router.push(`/docs/${doc.slug}`)"
+          class="w-full !ms-0"
+          round
+        >
+          {{doc.title}}
+        </el-button>
+      </div>
 
-    </el-card>
-    <el-card shadow="hover" body-class="h-full flex flex-col justify-center items-center">
+    </div>
+
+    <div class="card h-full flex flex-col justify-center items-center">
       <el-button
         size="large"
         :icon="Plus"
@@ -100,6 +100,6 @@ const { t } = useI18n({ messages: {
         @click="$router.push('/doc-groups/new')"
       ></el-button>
       <div>{{t('addDocGroup')}}</div>
-    </el-card>
+    </div>
   </div>
 </template>
