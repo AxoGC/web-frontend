@@ -7,6 +7,7 @@ import {api} from '@/utils/axios';
 import {useRouteParams, useRouteQuery} from '@vueuse/router';
 import {useI18n} from 'vue-i18n';
 import dayjs from 'dayjs';
+import {Setting} from '@element-plus/icons-vue';
 
 const persisted = usePersistedStore()
 const router = useRouter()
@@ -53,7 +54,7 @@ watchEffect(async () => {
 
 <template>
   <div v-if="forum" class="flex flex-col md:flex-row p-4 gap-4">
-    <div class="grow-[2] space-y-4">
+    <div class="grow-[3] space-y-4">
 
       <div
         class="card relative bg-cover bg-center"
@@ -73,9 +74,6 @@ watchEffect(async () => {
           </template>
           <template #extra>
             <div class="flex gap-2 flex-wrap justify-end">
-              <el-button @click="$router.push(`/forums/${param}/edit`)">
-                {{t('editForum')}}
-              </el-button>
               <el-button @click="$router.push(`/forums/${param}/new`)">
                 {{ t('newPost') }}
               </el-button>
@@ -122,7 +120,16 @@ watchEffect(async () => {
 
     </div>
 
-    <div class="grow space-y-4">
+    <div class="grow basis-64 space-y-4">
+
+      <div class="card">
+        <div class="flex justify-between items-center">
+          <div class="text-lg">{{t('notice')}}</div>
+          <el-button circle :icon="Setting" @click="$router.push(`/forums/${param}/edit`)">
+          </el-button>
+        </div>
+        <div v-html="forum.profile"></div>
+      </div>
 
       <div class="card">
 
