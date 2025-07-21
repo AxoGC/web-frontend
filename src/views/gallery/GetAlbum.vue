@@ -51,10 +51,9 @@ watch(
 <template>
   <div v-if="album" class="max-w-5xl mx-auto p-4 flex flex-col gap-4">
 
-    <el-card
-      shadow="hover"
-      body-class="h-full flex flex-col text-white relative bg-cover bg-center"
-      :body-style="{backgroundImage: `url(${persisted.imgAddr}/album-covers/${album.slug})`}"
+    <div
+      class="card h-full flex flex-col text-white relative bg-cover bg-center"
+      :style="{backgroundImage: `url(${persisted.imgAddr}/album-covers/${album.slug})`}"
     >
       <div class="absolute inset-0 bg-black/15"></div>
       <el-page-header @back="$router.back">
@@ -86,7 +85,7 @@ watch(
           </el-segmented>
         </div>
       </el-page-header>
-    </el-card>
+    </div>
 
     <!--
     <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-2">
@@ -96,7 +95,11 @@ watch(
     <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 space-y-2 gap-2">
     -->
     <div class="columns-xs space-y-2 gap-2">
-      <div v-for="image, index in album.images" :key="image.id" class="relative">
+      <div
+        v-for="image, index in album.images"
+        :key="image.id"
+        class="relative hover:scale-[1.02] duration-300"
+      >
         <el-image
           :src="`${persisted.imgAddr}/images/${image.filename}`"
           :preview-src-list="album.images.map(image=>`${persisted.imgAddr}/images/${image.filename}`)"
@@ -104,6 +107,7 @@ watch(
           fit="cover"
           class="rounded-xl"
           show-progress
+          preview-teleported
         >
           <template #toolbar="{ prev, next, setActiveItem, actions, reset }">
             <el-icon @click="prev"><Back /></el-icon>

@@ -122,6 +122,7 @@ watchEffect(async () => {
 
     <div class="grow basis-64 space-y-4">
 
+      <!-- 论坛公告 -->
       <div class="card">
         <div class="flex justify-between items-center">
           <div class="text-lg">{{t('notice')}}</div>
@@ -131,6 +132,7 @@ watchEffect(async () => {
         <div class="mt-4" v-html="forum.profile"></div>
       </div>
 
+      <!-- 推荐内容 -->
       <div class="card">
 
         <div class="flex justify-between items-center">

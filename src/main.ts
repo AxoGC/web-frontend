@@ -23,6 +23,10 @@ const i18n = createI18n({
       edit: '编辑',
       report: '举报',
       details: '详情',
+      popular: '热门',
+      latest: '最新',
+      agree: '赞成',
+      against: '反对',
 
       review: '评论',
       server: '服务器',
@@ -35,6 +39,7 @@ const i18n = createI18n({
       title: '标题',
       subTitle: '副标题',
       label: '名称',
+      notice: '公告',
       name: '名称',
       online: '在线',
       port: '端口',

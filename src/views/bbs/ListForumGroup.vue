@@ -33,6 +33,8 @@ const { t } = useI18n({ messages: {
     popular: '热门',
     latest: '最新',
 
+    activeUsers: '活跃用户',
+
   },
 } })
 
@@ -126,12 +128,15 @@ const postCountChartOption = computed<EChartsOption>(() => {
     </div>
     <el-empty v-else :description="$t('bbs.home.empty')" />
 
+    <!-- 右侧侧边栏 -->
     <div class="grow space-y-4">
 
+      <!-- 发帖量分布 -->
       <div class="card h-64">
         <v-chart :option="postCountChartOption" autoresize />
       </div>
 
+      <!-- 推荐内容 -->
       <div class="card mt-4">
         <div class="flex justify-between items-center">
           <div>{{t('recommend')}}</div>
@@ -152,6 +157,17 @@ const postCountChartOption = computed<EChartsOption>(() => {
               <div class="ms-auto">{{dayjs(recommend.updatedAt).format('MM月DD日 HH:mm')}}</div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 活跃用户 -->
+      <div class="card space-y-2">
+
+        <div>
+          {{t('activeUsers')}}
+        </div>
+
+        <div>
         </div>
       </div>
 

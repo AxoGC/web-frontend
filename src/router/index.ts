@@ -3,11 +3,6 @@ import type { RouteRecordRaw } from 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    nav?: {
-      index: string,
-      label: Record<string, string>,
-      icon?: object,
-    },
     activeIndex?: string,
     noFooter?: boolean,
   }
@@ -233,13 +228,37 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('@/views/EditReview.vue'),
   },
   {
+    path: '/goods',
+    component: () => import('@/views/shop/ListGoods.vue'),
+    meta: {
+      activeIndex: '/goods',
+    },
+  },
+  {
+    path: '/deepseek',
+    component: () => import('@/views/deepseek/NewChat.vue'),
+    meta: {
+      activeIndex: '/deepseek',
+    },
+  },
+  {
+    path: '/deepseek/:thread',
+    component: () => import('@/views/deepseek/ContinueChat.vue'),
+    meta: { activeIndex: '/deepseek' },
+  },
+  {
+    path: '/deepseek/history',
+    component: () => import('@/views/deepseek/ChatList.vue'),
+    meta: { activeIndex: '/deepseek' },
+  },
+  {
     path: '/:catchAll(.*)',
     name: '404',
     component: () => import('@/views/404.vue'),
     meta: {
       noFooter: true,
     },
-  }
+  },
 ]
 
 const router = createRouter({

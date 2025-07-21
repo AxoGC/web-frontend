@@ -69,4 +69,18 @@ export const navbarItems = [
       en: 'Servers',
     },
   },
+  {
+    index: '/goods',
+    label: {
+      zh: '道具商城',
+      en: 'Shop',
+    },
+  },
+  {
+    index: '/deepseek',
+    label: {
+      zh: 'DeepSeek',
+      en: 'DeepSeek',
+    },
+  },
 ]
