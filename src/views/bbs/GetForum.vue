@@ -128,7 +128,7 @@ watchEffect(async () => {
           <el-button circle :icon="Setting" @click="$router.push(`/forums/${param}/edit`)">
           </el-button>
         </div>
-        <div v-html="forum.profile"></div>
+        <div class="mt-4" v-html="forum.profile"></div>
       </div>
 
       <div class="card">
