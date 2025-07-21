@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ArrowRightBold } from '@element-plus/icons-vue'
+import { ArrowRight } from '@element-plus/icons-vue'
 // 路由相关
 const route = useRoute()
 const router = useRouter()
@@ -48,7 +48,7 @@ const parseShow = (i) => {
           <div class="nav-route" v-for="(i,index) in data" @click="handleClick(i)" @mouseenter="hoveredItem = index" @mouseleave="hoveredItem = -1"
             :style="{ 'display': isMobile?'flex':'', 'justify-content': isMobile?'space-between':'', 'align-items': isMobile?'center':'' }">
             <div>{{ parseShow(i) }}</div>
-            <ArrowRightBold class="arrowIcon" :class="hoveredItem===index?'hoveredItem':''"/>
+            <ArrowRight v-if="isMobile" class="arrowIcon" :class="hoveredItem===index?'hoveredItem':''"/>
           </div>
         </div>
       </div>
