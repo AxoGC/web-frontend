@@ -23,6 +23,7 @@ const  { t } = useI18n({ messages: {
   zh: {
     reviewTitle: '评论列表',
     reply: '回复',
+    poster: '楼主',
   },
 } })
 </script>
@@ -83,6 +84,12 @@ const  { t } = useI18n({ messages: {
             </div>
           </div>
           <div class="mt-1">{{review.content}}</div>
+          <div class="ms-2 mt-1 text-sm text-slate-600">
+            <div v-for="reply in review.reviews" :key="reply.id" class="truncate">
+              <el-tag v-if="reply.user.id===post.user.id" size="small">{{t('poster')}}</el-tag>
+              {{reply.user.name}}: {{reply.content}}
+            </div>
+          </div>
           <div v-if="review.reviewCount" class="text-sm text-slate-600 flex justify-end items-center">
             {{review.reviewCount}} {{t('reply')}}
           </div>
@@ -95,8 +102,7 @@ const  { t } = useI18n({ messages: {
           :total="post.reviewCount"
           v-model:current-page="page"
           v-model:page-size="pageSize"
-        >
-        </el-pagination>
+        ></el-pagination>
       </div>
 
     </div>
