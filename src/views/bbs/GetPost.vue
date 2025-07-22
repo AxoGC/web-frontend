@@ -84,7 +84,7 @@ const  { t } = useI18n({ messages: {
             </div>
           </div>
           <div class="mt-1">{{review.content}}</div>
-          <div class="ms-2 mt-1 text-sm text-slate-600">
+          <div class="mx-2 mt-1 text-sm text-slate-600">
             <div v-for="reply in review.reviews" :key="reply.id" class="truncate">
               <el-tag v-if="reply.user.id===post.user.id" size="small">{{t('poster')}}</el-tag>
               {{reply.user.name}}: {{reply.content}}
