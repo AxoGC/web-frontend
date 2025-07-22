@@ -22,6 +22,7 @@ watchEffect(async () => {
 const  { t } = useI18n({ messages: {
   zh: {
     reviewTitle: '评论列表',
+    reply: '回复',
   },
 } })
 </script>
@@ -82,6 +83,9 @@ const  { t } = useI18n({ messages: {
             </div>
           </div>
           <div class="mt-1">{{review.content}}</div>
+          <div v-if="review.reviewCount" class="text-sm text-slate-600 flex justify-end items-center">
+            {{review.reviewCount}} {{t('reply')}}
+          </div>
         </div>
       </div>
 
