@@ -94,7 +94,7 @@ watchEffect(async () => {
             @click="router.push(`/posts/${post.slug}`)"
           >
             <div class="basis-0 grow-[3]">{{post.title}}</div>
-            <user-info :user="post.user" class="basis-0 grow-[2]">
+            <user-info :user="post.user" class="basis-0 grow">
               {{post.user.name}}
             </user-info>
             <div class="text-sm text-slate-600 block md:contents">

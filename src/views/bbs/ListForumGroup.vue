@@ -35,6 +35,8 @@ const { t } = useI18n({ messages: {
     latest: '最新',
 
     activeUsers: '活跃用户',
+    byReviews: '按评论',
+    byPosts: '按帖子',
 
   },
 } })
@@ -49,6 +51,13 @@ watchEffect(async () => {
 const recommendOptions = [
   { label: t('popular'), value: 'popular' },
   { label: t('latest'), value: 'latest' },
+]
+
+const activeUsersOption = ref('byReviews')
+
+const activeUserOptions = [
+  { label: t('byReviews'), value: 'byReviews' },
+  { label: t('byPosts'), value: 'byPosts' },
 ]
 
 use([TitleComponent, PieChart, CanvasRenderer, TooltipComponent])
@@ -164,8 +173,9 @@ const postCountChartOption = computed<EChartsOption>(() => {
       <!-- 活跃用户 -->
       <div class="card space-y-2">
 
-        <div>
-          {{t('activeUsers')}}
+        <div class="flex justify-between items-center">
+          <div>{{t('activeUsers')}}</div>
+          <el-segmented v-model="activeUsersOption" :options="activeUserOptions"></el-segmented>
         </div>
 
         <div>
