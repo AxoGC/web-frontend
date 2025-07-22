@@ -8,6 +8,7 @@ import {useRouteParams, useRouteQuery} from '@vueuse/router';
 import {useI18n} from 'vue-i18n';
 import dayjs from 'dayjs';
 import {Setting} from '@element-plus/icons-vue';
+import UserInfo from '@/components/UserInfo.vue';
 
 const persisted = usePersistedStore()
 const router = useRouter()
@@ -93,9 +94,9 @@ watchEffect(async () => {
             @click="router.push(`/posts/${post.slug}`)"
           >
             <div class="basis-0 grow-[3]">{{post.title}}</div>
-            <div class="basis-0 grow text-sm text-slate-600">
+            <user-info :user="post.user" class="basis-0 grow-[2]">
               {{post.user.name}}
-            </div>
+            </user-info>
             <div class="text-sm text-slate-600 block md:contents">
               <span class="basis-0 grow">
                 {{post.reviewCount}} {{t('review')}}

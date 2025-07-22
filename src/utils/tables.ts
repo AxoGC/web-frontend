@@ -74,6 +74,7 @@ export interface User {
   setting: Record<string, any>
   followingCount: number
   followerCount: number
+  userRoles: UserRole[]
 }
 
 export interface Guild {

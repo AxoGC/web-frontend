@@ -13,6 +13,7 @@ import type {EChartsOption} from 'echarts';
 import VChart from 'vue-echarts';
 import {Setting} from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
+import UserInfo from './UserInfo.vue';
 
 const forumGroups = ref<ForumGroup[]>([])
 const persisted = usePersistedStore()

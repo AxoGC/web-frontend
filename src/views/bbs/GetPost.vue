@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import {watchEffect} from 'vue';
 import {ref} from 'vue';
 import {useI18n} from 'vue-i18n';
+import UserInfo from '@/components/UserInfo.vue';
 
 const param = useRouteParams<string>('post')
 const post = ref<Post|null>(null)
@@ -35,7 +36,7 @@ const  { t } = useI18n({ messages: {
           <template #content>
             <div class="flex gap-2 flex-wrap items-center">
               <div>{{post.title}}</div>
-              <div class="text-sm text-black text-opacity-60">{{post.user.name}}</div>
+              <user-info :user="post.user"></user-info>
             </div>
           </template>
           <template #extra>
@@ -73,9 +74,7 @@ const  { t } = useI18n({ messages: {
           class="p-2 even:bg-slate-50 hover:bg-slate-100 rounded-2xl duration-300"
         >
           <div class="flex items-center gap-2">
-            <div>
-              {{review.user.name}}
-            </div>
+            <user-info :user="review.user"></user-info>
             <el-tag v-if="review.attitude" type="success">{{t('agree')}}</el-tag>
             <el-tag v-else-if="review.attitude===false" type="danger">{{t('against')}}</el-tag>
             <div class="ms-auto text-sm text-slate-600">
